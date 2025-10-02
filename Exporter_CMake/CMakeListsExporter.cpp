@@ -898,7 +898,10 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
                                 tmpStringA.append(wxString::Format("pkg_check_modules(%s REQUIRED %s)\n", prefix, package));
                                 packageCheckModulesAdded.push_back(package);
                             }
-                            tmpStringA.append(wxString::Format("include_directories(\"${%s_INCLUDE_DIRS}\")%s", prefix, EOL));
+                            wxString packageIncludeDirsStr = wxString::Format("%s_INCLUDE_DIRS", prefix);
+                            tmpStringA.append(wxString::Format("if(%s)%s", packageIncludeDirsStr, EOL));
+                            tmpStringA.append(wxString::Format("\tinclude_directories(\"${%s}\")%s", packageIncludeDirsStr, EOL));
+                            tmpStringA.append(wxString::Format("endif()%s", EOL));
                             tmpStringA.append(wxString::Format("set(CMAKE_CXX_FLAGS \"${CMAKE_CXX_FLAGS} ${%s_CFLAGS_OTHER}\")%s", prefix, EOL));
                             done = true;
                             break;
