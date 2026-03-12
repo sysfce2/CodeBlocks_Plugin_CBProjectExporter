@@ -14,7 +14,7 @@ class CMakeListsExporter : public ExporterBase
         /** Default constructor */
         CMakeListsExporter();
         /** Default destructor */
-        virtual ~CMakeListsExporter();
+        ~CMakeListsExporter() override = default;
         void RunExport();
 
     protected:
@@ -35,7 +35,6 @@ class CMakeListsExporter : public ExporterBase
             GVS_EXPORT_NON_DEFAULT
         };
 
-        wxString GetTargetRootDirectory(ProjectBuildTarget * buildTarget);
         void ExpandMacros(wxString & buffer);
         void ConvertMacros(wxString & buffer, ConvertMacro_DirSeperator eConvertDirSeperator);
         void ExportGlobalVariableSets(ExportMode eMode);

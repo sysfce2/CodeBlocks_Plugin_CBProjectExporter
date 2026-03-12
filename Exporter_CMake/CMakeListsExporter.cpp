@@ -37,35 +37,6 @@ CMakeListsExporter::CMakeListsExporter()
     }
 }
 
-CMakeListsExporter::~CMakeListsExporter()
-{
-}
-
-wxString CMakeListsExporter::GetTargetRootDirectory(ProjectBuildTarget * buildTarget)
-{
-    wxFileName wxfTargetFileName;
-    FilesList & filesList = buildTarget->GetFilesList();
-
-    for (FilesList::iterator it = filesList.begin(); it != filesList.end(); it++)
-    {
-        ProjectFile * pf = *it;
-        wxString filename = pf->file.GetFullPath();
-        FileType fileType = FileTypeOf(filename);
-
-        if (pf->compile && (fileType == ftSource))
-        {
-            wxFileName wxFN(filename);
-
-            if (!wxfTargetFileName.Exists() || (wxFN.GetDirCount() < wxfTargetFileName.GetDirCount()))
-            {
-                wxfTargetFileName = wxFN;
-            }
-        }
-    }
-
-    return wxfTargetFileName.GetFullPath();
-}
-
 void CMakeListsExporter::ExpandMacros(wxString & buffer)
 {
     if (buffer.IsEmpty())
@@ -757,7 +728,7 @@ void CMakeListsExporter::ExportBuildTarget(cbProject * project, ProjectBuildTarg
     }
 
 #endif
-    wxString sTargetRootDir = GetTargetRootDirectory(buildTarget);
+    wxString sTargetRootDir = project->GetFilename();
 #ifdef DEBUG
     m_ContentCMakeListTarget.append(wxString::Format("# Target detected root directory:  %s%s", sTargetRootDir, EOL));
     m_ContentCMakeListTarget.append(wxString::Format("# Target Options:%s", EOL));
